@@ -8,7 +8,7 @@ export default function Home(props: IHomeProps){
     return (
         props.currentUser ?
             <>
-                <p>Welcome to Revature Reimbursements {props.currentUser.username}! </p>
+                <p>Welcome to Revature Reimbursements {props.currentUser.name}! </p>
             </>
             :
             <>

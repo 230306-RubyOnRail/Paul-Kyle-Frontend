@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
 
 import { User } from "../models/user";
+import {Navigate} from "react-router-dom";
 
 interface ReimbursementRequest {
   id: number;
@@ -120,15 +121,23 @@ export default function Reimbursements(props: IReimbursementProps) {
   };
 
   return (
-    <div style={{ height: 900 , width: '90%', padding: 100}}>
-      <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button>
-      <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
-      <div>
-        <Button variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
-        <Button variant="contained" color="primary" onClick={handleUpdateClick}>Update</Button>
-        <Button variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
-        <Button variant="contained" color="primary" onClick={clearClick}>Clear</Button>
-      </div>
-    </div>
+    props.currentUser ?
+      <>
+        <div style={{ height: 900 , width: '90%', padding: 100}}>
+          <p>{props.currentUser!.name}'s Reimbursements.</p>
+          <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button>
+          <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
+          <div>
+            <Button variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
+            <Button variant="contained" color="primary" onClick={handleUpdateClick}>Update</Button>
+            <Button variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
+            <Button variant="contained" color="primary" onClick={clearClick}>Clear</Button>
+          </div>
+        </div>
+      </>
+      :
+      <>
+        <Navigate to="/login"/>
+      </>
   );
 }
