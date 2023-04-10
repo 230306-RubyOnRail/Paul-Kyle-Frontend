@@ -104,7 +104,7 @@ export default function Reimbursements(props: IReimbursementProps) {
     const newId = -1; 
     const newRow: ReimbursementRequest = {
       id: newId,
-      personnel_id: 0,
+      personnel_id: props.currentUser!.user_id,
       request_amount: 0,
       subject: '',
       request: '',

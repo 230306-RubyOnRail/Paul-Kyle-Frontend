@@ -38,7 +38,6 @@ export default function Nav(props: INavProps) {
                                 <Button color="inherit"><Link className="link" to="/login">Login</Link></Button>
                             </>
                     }
-
                 </Toolbar>
             </AppBar>
         </Box>
