@@ -37,7 +37,7 @@ export default function Nav(props: INavProps) {
                     {
                         props.currentUser ?
                             <>
-                                <Button color="inherit"><Link className="link" to="/todos">Reimbursements</Link></Button>
+                                <Button color="inherit"><Link className="link" to="/reimbursements">Reimbursements</Link></Button>
                                 <Button color="inherit" onClick={logout}>Logout</Button>
                             </>
                             :
