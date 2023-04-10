@@ -82,7 +82,6 @@ export default function Reimbursements(props: IReimbursementProps) {
     setRows(updatedRows);
   };
 
-
   const handleUpdateClick = () => {
     if (selectedId){
     updateReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
@@ -119,8 +118,6 @@ export default function Reimbursements(props: IReimbursementProps) {
   const clearClick = () => {
     setSelectedId(null)
   };
-
-
 
   return (
     <div style={{ height: 900 , width: '90%', padding: 100}}>

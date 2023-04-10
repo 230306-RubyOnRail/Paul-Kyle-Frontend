@@ -1,13 +1,11 @@
 
 
-export class User {
-    id: number;
+export interface User {
+    user_id: number;
     token: string;
+    username: string;
+    user_title: string;
     name: string;
 
-    constructor(id: number, token: string, name: string){
-        this.id = id;
-        this.token = token;
-        this.name = name;
-    }
+
 }
