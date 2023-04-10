@@ -3,6 +3,8 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
 
+import { User } from "../models/user";
+
 interface ReimbursementRequest {
   id: number;
   personnel_id: number;
@@ -12,6 +14,10 @@ interface ReimbursementRequest {
   status: number;
   manager_id?: number;
   manager_comment?: string;
+}
+
+interface IReimbursementProps{
+  currentUser: User | undefined
 }
 
 const columns: GridColDef[] = [
@@ -40,7 +46,7 @@ async function postReimbursementRequest(request: ReimbursementRequest): Promise<
   return response.data;
 }
 
-export default function Reimbursements(props: any) {
+export default function Reimbursements(props: IReimbursementProps) {
   const [rows, setRows] = useState<ReimbursementRequest[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 

@@ -1,6 +1,7 @@
 import { SyntheticEvent, useState } from "react";
-import { User } from "../models/user";
 import { Navigate } from "react-router-dom";
+
+import { User } from "../models/user";
 import { authenticate } from "../remote/services/session-service";
 
 interface ILoginProps{
@@ -23,7 +24,6 @@ export default function Login(props: ILoginProps){
     }
 
     let login = async() => {
-
         if (userName && password) {
             try {
                 let response = await authenticate({userName, password});
