@@ -2,7 +2,7 @@ import { DataGrid, GridColDef, GridRowParams} from '@mui/x-data-grid';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
-
+import {authAppClient} from "../remote/authenticated-app-client";
 import { User } from "../models/user";
 import {Navigate} from "react-router-dom";
 
@@ -27,23 +27,23 @@ const columns: GridColDef[] = [
   { field: 'request_amount', headerName: 'Amount', flex: .1, editable: true },
   { field: 'subject', headerName: 'Subject', flex: .4, editable: true },
   { field: 'request', headerName: 'Request', flex: .4, editable: true },
-  { field: 'status', headerName: 'Status',  flex: .1, editable: false  },
+  { field: 'status', headerName: 'Status',  flex: .1, editable: true , type: "singleSelect",  valueOptions: [{ value: 0, label: 'Pending' },{ value: 1, label: 'Approved' },{ value: 2, label: 'Rejected' }]},
   { field: 'manager_id', headerName: 'Manager ID', flex: .1, editable: true },
   { field: 'manager_comment', headerName: 'Manager Comment',flex: .4, editable: true },
 ];
 
 async function fetchReimbursementRequests(): Promise<ReimbursementRequest[]> {
-  const response = await axios.get<ReimbursementRequest[]>('http://localhost:3000/reimbursement');
+  const response = await authAppClient.get<ReimbursementRequest[]>('http://localhost:3000/reimbursement');
   return response.data;
 }
 
 async function updateReimbursementRequest(request: ReimbursementRequest): Promise<ReimbursementRequest> {
-  const response = await axios.put<ReimbursementRequest>(`http://localhost:3000/reimbursement/${request.id}`, request);
+  const response = await authAppClient.put<ReimbursementRequest>(`http://localhost:3000/reimbursement/${request.id}`, request);
   return response.data;
 }
 
 async function postReimbursementRequest(request: ReimbursementRequest): Promise<ReimbursementRequest> {
-  const response = await axios.post<ReimbursementRequest>(`http://localhost:3000/reimbursement`, request);
+  const response = await authAppClient.post<ReimbursementRequest>(`http://localhost:3000/reimbursement`, request);
   return response.data;
 }
 
@@ -66,7 +66,7 @@ export default function Reimbursements(props: IReimbursementProps) {
   };
 
   const handleDeleteClick = () => {
-    axios.delete(`http://localhost:3000/reimbursement/${selectedId}`)
+    authAppClient.delete(`http://localhost:3000/reimbursement/${selectedId}`)
       .then(res => {
         setRows(rows.filter(row => row.id !== selectedId));
       })
@@ -102,6 +102,7 @@ export default function Reimbursements(props: IReimbursementProps) {
   };
   
   const handleCreateRow = () => {
+    console.log("this is the first problem")
     const newId = -1; 
     const newRow: ReimbursementRequest = {
       id: newId,
@@ -113,7 +114,10 @@ export default function Reimbursements(props: IReimbursementProps) {
       manager_id: 0,
       manager_comment: ''
     };
-    setRows([...rows, newRow]); 
+    if (rows?.length)
+      setRows([...rows, newRow]);
+    else
+      setRows([newRow]); 
   };
 
   const clearClick = () => {
