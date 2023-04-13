@@ -60,56 +60,9 @@ export default function Reimbursements(props: IReimbursementProps) {
     forceUpdate();
   };
 
-  // const onRowEditStop = (params: GridRowParams) => {
-  //   console.log(params.row)
-  //   const updatedRows = rows.map((row) => {
-  //     if (row.id === params.id) {
-  //       return { ...row, ...params.row };
-  //     }
-  //     return row;
-  //   });
-  //   setRows(updatedRows);
-  // };
-
   function handleUpdateClick(){
     props.setReimbursementID(selectedId!);
   }
-  // const handleUpdateClick = () => {
-  //   if (selectedId){
-  //   updateReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
-  //     .then(res => {
-  //       setRows(rows.filter(row => row.id !== selectedId).concat(res));
-  //     })
-  //   }
-  // };
-
-  // const handleSubmitClick = () => {
-  //   if (selectedId){
-  //     postReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
-  //     .then(res => {
-  //       setRows(rows.filter(row => row.id !== selectedId).concat(res));
-  //     })
-  //   }
-  // };
-  
-  // const handleCreateRow = () => {
-  //   console.log("this is the first problem")
-  //   const newId = -1;
-  //   const newRow: ReimbursementRequest = {
-  //     id: newId,
-  //     personnel_id: props.currentUser!.user_id,
-  //     request_amount: '0',
-  //     subject: '',
-  //     request: '',
-  //     status: 0,
-  //     manager_id: 0,
-  //     manager_comment: ''
-  //   };
-  //   if (rows?.length)
-  //     setRows([...rows, newRow]);
-  //   else
-  //     setRows([newRow]);
-  // };
 
   function createNewReimbursement() {
     const new_reimbursement: ReimbursementRequest = {
