@@ -18,7 +18,7 @@ const columns: GridColDef[] = [
   { field: 'personnel_id', headerName: 'User ID', flex: .1, editable: false },
   { field: 'request_amount', headerName: 'Amount', flex: .1, editable: true },
   { field: 'subject', headerName: 'Subject', flex: .4, editable: true },
-  { field: 'request', headerName: 'Request', flex: .4, editable: true },
+  { field: 'request', headerName: 'More Information', flex: .4, editable: true },
   { field: 'status', headerName: 'Status',  flex: .1, editable: true , type: "singleSelect",  valueOptions: [{ value: 0, label: 'Pending' },{ value: 1, label: 'Approved' },{ value: 2, label: 'Rejected' }]},
   { field: 'manager_id', headerName: 'Manager ID', flex: .1, editable: true },
   { field: 'manager_comment', headerName: 'Manager Comment',flex: .4, editable: true },
@@ -110,6 +110,19 @@ export default function Reimbursements(props: IReimbursementProps) {
       setRows([newRow]); 
   };
 
+  function createNewReimbursement() {
+    const new_reimbursement: ReimbursementRequest = {
+      id: -1,
+      personnel_id: props.currentUser!.user_id,
+      request_amount: '0',
+      subject: 'Update Subject',
+      request: 'Update Information',
+      status: 0,
+      manager_id: 0,
+      manager_comment: ''
+    }
+  }
+
   const clearClick = () => {
     setSelectedId(null)
   };
@@ -121,10 +134,10 @@ export default function Reimbursements(props: IReimbursementProps) {
 
           {(props.currentUser!.user_title === "0") ?
             <>
-              <p>Reimbursements managed by {props.currentUser!.name}'s</p>
+              <p>{props.currentUser!.name}'s Reimbursements.</p>
               <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button></>
-              :
-              <><p>{props.currentUser!.name}'s Reimbursements.</p></>
+            :
+              <p>Reimbursements managed by {props.currentUser!.name}'s</p>
            }
 
           <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
