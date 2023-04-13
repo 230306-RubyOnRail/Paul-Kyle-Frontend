@@ -1,24 +1,16 @@
 import { DataGrid, GridColDef, GridRowParams} from '@mui/x-data-grid';
-import axios from 'axios';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
+import {Link, Navigate} from "react-router-dom";
+
 import {authAppClient} from "../remote/authenticated-app-client";
 import { User } from "../models/user";
-import {Navigate} from "react-router-dom";
+import { ReimbursementRequest} from "../models/reimbursement-request";
 
-interface ReimbursementRequest {
-  id: number;
-  personnel_id: number;
-  request_amount: number;
-  subject: string;
-  request: string;
-  status: number;
-  manager_id?: number;
-  manager_comment?: string;
-}
 
 interface IReimbursementProps{
-  currentUser: User | undefined
+  currentUser: User | undefined,
+  setReimbursementID: (newID: Number) => void
 }
 
 const columns: GridColDef[] = [
@@ -131,11 +123,16 @@ export default function Reimbursements(props: IReimbursementProps) {
           <p>{props.currentUser!.name}'s Reimbursements.</p>
           <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button>
           <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
-          <div>
+          <div style={{paddingRight: "20px", columnGap: "20px"}}>
             <Button variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
             <Button variant="contained" color="primary" onClick={handleUpdateClick}>Update</Button>
             <Button variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
             <Button variant="contained" color="primary" onClick={clearClick}>Clear</Button>
+            {selectedId ?
+              <Button variant="contained" color="primary" onClick={handleNewUpdateClick} component={Link} to="/editreimbursement" >Update</Button>
+              :
+              <Button variant="contained" style={{backgroundColor: "#808080"}}>Update</Button>
+            }
           </div>
         </div>
       </>
@@ -144,4 +141,8 @@ export default function Reimbursements(props: IReimbursementProps) {
         <Navigate to="/login"/>
       </>
   );
+
+  function handleNewUpdateClick(){
+    props.setReimbursementID(selectedId!);
+  }
 }
