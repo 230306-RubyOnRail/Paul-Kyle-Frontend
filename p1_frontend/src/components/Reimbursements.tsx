@@ -75,14 +75,14 @@ export default function Reimbursements(props: IReimbursementProps) {
     setRows(updatedRows);
   };
 
-  const handleUpdateClick = () => {
-    if (selectedId){
-    updateReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
-      .then(res => {
-        setRows(rows.filter(row => row.id !== selectedId).concat(res));
-      })
-    }
-  };
+  // const handleUpdateClick = () => {
+  //   if (selectedId){
+  //   updateReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
+  //     .then(res => {
+  //       setRows(rows.filter(row => row.id !== selectedId).concat(res));
+  //     })
+  //   }
+  // };
 
   const handleSubmitClick = () => {
     if (selectedId){
@@ -130,11 +130,10 @@ export default function Reimbursements(props: IReimbursementProps) {
            }
 
           <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
-          <div style={{paddingRight: "20px", columnGap: "20px"}}>
-            <Button variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
-            <Button variant="contained" color="primary" onClick={handleUpdateClick}>Update</Button>
-            <Button variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
-            <Button variant="contained" color="primary" onClick={clearClick}>Clear</Button>
+          <div>
+            <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
+            <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
+            <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={clearClick}>Clear Selection</Button>
             {selectedId ?
               <Button variant="contained" color="primary" onClick={handleNewUpdateClick} component={Link} to="/editreimbursement" >Update</Button>
               :
