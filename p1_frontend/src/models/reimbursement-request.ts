@@ -1,7 +1,7 @@
 export interface ReimbursementRequest {
     id: number;
     personnel_id: number;
-    request_amount: number;
+    request_amount: string;
     subject: string;
     request: string;
     status: number;

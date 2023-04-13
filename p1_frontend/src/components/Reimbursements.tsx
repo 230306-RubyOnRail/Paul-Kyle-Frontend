@@ -99,7 +99,7 @@ export default function Reimbursements(props: IReimbursementProps) {
     const newRow: ReimbursementRequest = {
       id: newId,
       personnel_id: props.currentUser!.user_id,
-      request_amount: 0,
+      request_amount: '0',
       subject: '',
       request: '',
       status: 0,
@@ -119,9 +119,16 @@ export default function Reimbursements(props: IReimbursementProps) {
   return (
     props.currentUser ?
       <>
-        <div style={{ height: 900 , width: '90%', padding: 100}}>
-          <p>{props.currentUser!.name}'s Reimbursements.</p>
-          <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button>
+        <div style={{ height: 750 , width: '90%', padding: 20}}>
+
+          {(props.currentUser!.user_title === "0") ?
+            <>
+              <p>Reimbursements managed by {props.currentUser!.name}'s</p>
+              <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button></>
+              :
+              <><p>{props.currentUser!.name}'s Reimbursements.</p></>
+           }
+
           <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
           <div style={{paddingRight: "20px", columnGap: "20px"}}>
             <Button variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
