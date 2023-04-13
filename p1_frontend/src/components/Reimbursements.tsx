@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef, GridRowParams} from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {Link, Navigate} from "react-router-dom";
 
 import {authAppClient} from "../remote/authenticated-app-client";
@@ -37,6 +37,8 @@ async function postReimbursementRequest(request: ReimbursementRequest): Promise<
 export default function Reimbursements(props: IReimbursementProps) {
   const [rows, setRows] = useState<ReimbursementRequest[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  //minimizing calls to database to retrieve table information
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
 
   useEffect(() => {
@@ -45,30 +47,29 @@ export default function Reimbursements(props: IReimbursementProps) {
       setRows(data);
     }
 
-    fetchData();
-  }, []);
+    fetchData().then();
+  }, [ignored]);
 
   const handleSelectionModelChange = (selectionModel: any) => {
     setSelectedId(selectionModel["id"]);
   };
 
   const handleDeleteClick = () => {
-    authAppClient.delete(`http://localhost:3000/reimbursement/${selectedId}`)
-      .then(res => {
-        setRows(rows.filter(row => row.id !== selectedId));
-      })
+    authAppClient.delete(`http://localhost:3000/reimbursement/${selectedId}`).then();
+    setSelectedId(null);
+    forceUpdate();
   };
 
-  const onRowEditStop = (params: GridRowParams) => {
-    console.log(params.row)
-    const updatedRows = rows.map((row) => {
-      if (row.id === params.id) {
-        return { ...row, ...params.row };
-      }
-      return row;
-    });
-    setRows(updatedRows);
-  };
+  // const onRowEditStop = (params: GridRowParams) => {
+  //   console.log(params.row)
+  //   const updatedRows = rows.map((row) => {
+  //     if (row.id === params.id) {
+  //       return { ...row, ...params.row };
+  //     }
+  //     return row;
+  //   });
+  //   setRows(updatedRows);
+  // };
 
   function handleUpdateClick(){
     props.setReimbursementID(selectedId!);
@@ -82,45 +83,48 @@ export default function Reimbursements(props: IReimbursementProps) {
   //   }
   // };
 
-  const handleSubmitClick = () => {
-    if (selectedId){
-      postReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
-      .then(res => {
-        setRows(rows.filter(row => row.id !== selectedId).concat(res));
-      })
-    }
-  };
+  // const handleSubmitClick = () => {
+  //   if (selectedId){
+  //     postReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
+  //     .then(res => {
+  //       setRows(rows.filter(row => row.id !== selectedId).concat(res));
+  //     })
+  //   }
+  // };
   
-  const handleCreateRow = () => {
-    console.log("this is the first problem")
-    const newId = -1; 
-    const newRow: ReimbursementRequest = {
-      id: newId,
-      personnel_id: props.currentUser!.user_id,
-      request_amount: '0',
-      subject: '',
-      request: '',
-      status: 0,
-      manager_id: 0,
-      manager_comment: ''
-    };
-    if (rows?.length)
-      setRows([...rows, newRow]);
-    else
-      setRows([newRow]); 
-  };
+  // const handleCreateRow = () => {
+  //   console.log("this is the first problem")
+  //   const newId = -1;
+  //   const newRow: ReimbursementRequest = {
+  //     id: newId,
+  //     personnel_id: props.currentUser!.user_id,
+  //     request_amount: '0',
+  //     subject: '',
+  //     request: '',
+  //     status: 0,
+  //     manager_id: 0,
+  //     manager_comment: ''
+  //   };
+  //   if (rows?.length)
+  //     setRows([...rows, newRow]);
+  //   else
+  //     setRows([newRow]);
+  // };
 
   function createNewReimbursement() {
     const new_reimbursement: ReimbursementRequest = {
       id: -1,
       personnel_id: props.currentUser!.user_id,
-      request_amount: '0',
+      request_amount: '0.0',
       subject: 'Update Subject',
       request: 'Update Information',
       status: 0,
       manager_id: 0,
       manager_comment: ''
     }
+    postReimbursementRequest(new_reimbursement).then();
+    setSelectedId(null);
+    forceUpdate();
   }
 
   const clearClick = () => {
@@ -135,15 +139,14 @@ export default function Reimbursements(props: IReimbursementProps) {
           {(props.currentUser!.user_title === "0") ?
             <>
               <p>{props.currentUser!.name}'s Reimbursements.</p>
-              <Button variant="contained" color="primary" onClick={handleCreateRow}>Create Row</Button></>
+              <Button variant="contained" color="primary" onClick={createNewReimbursement}>Create Row</Button></>
             :
               <p>Reimbursements managed by {props.currentUser!.name}'s</p>
            }
 
-          <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
-          <div>
+          <DataGrid rows={rows} columns={columns} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
 
-            <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
+          <div>
             {selectedId ? <>
               <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleDeleteClick}>Delete Reimbursement</Button>
               <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={clearClick}>Clear Selection</Button>
