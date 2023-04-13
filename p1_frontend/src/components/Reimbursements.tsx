@@ -29,11 +29,6 @@ async function fetchReimbursementRequests(): Promise<ReimbursementRequest[]> {
   return response.data;
 }
 
-async function updateReimbursementRequest(request: ReimbursementRequest): Promise<ReimbursementRequest> {
-  const response = await authAppClient.put<ReimbursementRequest>(`http://localhost:3000/reimbursement/${request.id}`, request);
-  return response.data;
-}
-
 async function postReimbursementRequest(request: ReimbursementRequest): Promise<ReimbursementRequest> {
   const response = await authAppClient.post<ReimbursementRequest>(`http://localhost:3000/reimbursement`, request);
   return response.data;
@@ -75,6 +70,9 @@ export default function Reimbursements(props: IReimbursementProps) {
     setRows(updatedRows);
   };
 
+  function handleUpdateClick(){
+    props.setReimbursementID(selectedId!);
+  }
   // const handleUpdateClick = () => {
   //   if (selectedId){
   //   updateReimbursementRequest(rows.filter(row => row.id === selectedId)[0])
@@ -131,13 +129,16 @@ export default function Reimbursements(props: IReimbursementProps) {
 
           <DataGrid rows={rows} editMode='row' columns={columns} onRowEditStop ={onRowEditStop} disableColumnMenu  onRowClick = {handleSelectionModelChange} sortModel={[{field: 'id',sort: 'asc',}]} />
           <div>
-            <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleDeleteClick}>Delete</Button>
+
             <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleSubmitClick}>Submit</Button>
-            <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={clearClick}>Clear Selection</Button>
-            {selectedId ?
-              <Button variant="contained" color="primary" onClick={handleNewUpdateClick} component={Link} to="/editreimbursement" >Update</Button>
-              :
-              <Button variant="contained" style={{backgroundColor: "#808080"}}>Update</Button>
+            {selectedId ? <>
+              <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleDeleteClick}>Delete Reimbursement</Button>
+              <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={clearClick}>Clear Selection</Button>
+              <Button style={{marginRight: "20px"}} variant="contained" color="primary" onClick={handleUpdateClick} component={Link} to="/editreimbursement" >Update</Button> </>
+              : <>
+              <Button variant="contained" style={{backgroundColor: "#808080", marginRight: "20px"}}>Delete Reimbursement</Button>
+              <Button variant="contained" style={{backgroundColor: "#808080", marginRight: "20px"}}>Clear Selection</Button>
+              <Button variant="contained" style={{backgroundColor: "#808080", marginRight: "20px"}}>Update</Button>  </>
             }
           </div>
         </div>
@@ -147,8 +148,4 @@ export default function Reimbursements(props: IReimbursementProps) {
         <Navigate to="/login"/>
       </>
   );
-
-  function handleNewUpdateClick(){
-    props.setReimbursementID(selectedId!);
-  }
 }
