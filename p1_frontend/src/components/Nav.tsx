@@ -31,6 +31,12 @@ export default function Nav(props: INavProps) {
                             <>
                                 <Button color="inherit"><Link className="link" to="/home">Home</Link></Button>
                                 <Button color="inherit"><Link className="link" to="/reimbursements">Reimbursements</Link></Button>
+                                {props.currentUser.user_title === "1" ?
+                                <Button color="inherit"><Link className="link" to="/createuser">New User</Link></Button>
+                                :
+                                null
+                                }
+                                
                                 <Button color="inherit" onClick={logout}><Link className="link" to="/login">Logout</Link></Button>
                             </>
                             :

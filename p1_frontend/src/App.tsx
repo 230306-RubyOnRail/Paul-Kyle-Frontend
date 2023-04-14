@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import {User} from "./models/user";
 import EditReimbursement from "./components/EditReimbursement";
+import CreateUser from "./components/CreateUser";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/login" element={<Login currentUser={principal} setCurrentUser={setPrincipal} />} />
                 <Route path="/home" element={<Home currentUser={principal}/>} />
                 <Route path="/reimbursements" element={<Reimbursements currentUser={principal} setReimbursementID={setReimbursementId} />} />
+                <Route path="/createuser" element={<CreateUser currentUser={principal} />} />
                 <Route path="/editreimbursement" element={<EditReimbursement currentUser={principal} reimbursementID={reimbursementID} />} />
             </Routes>
         </BrowserRouter>
