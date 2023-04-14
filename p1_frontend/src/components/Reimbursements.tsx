@@ -16,12 +16,12 @@ interface IReimbursementProps{
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', flex: .1 , editable: false },
   { field: 'personnel_id', headerName: 'User ID', flex: .1, editable: false },
-  { field: 'request_amount', headerName: 'Amount', flex: .1, editable: true },
-  { field: 'subject', headerName: 'Subject', flex: .4, editable: true },
-  { field: 'request', headerName: 'More Information', flex: .4, editable: true },
-  { field: 'status', headerName: 'Status',  flex: .1, editable: true , type: "singleSelect",  valueOptions: [{ value: 0, label: 'Pending' },{ value: 1, label: 'Approved' },{ value: 2, label: 'Rejected' }]},
-  { field: 'manager_id', headerName: 'Manager ID', flex: .1, editable: true },
-  { field: 'manager_comment', headerName: 'Manager Comment',flex: .4, editable: true },
+  { field: 'request_amount', headerName: 'Amount', flex: .1, editable: false },
+  { field: 'subject', headerName: 'Subject', flex: .4, editable: false },
+  { field: 'request', headerName: 'More Information', flex: .4, editable: false },
+  { field: 'status', headerName: 'Status',  flex: .1, editable: false , type: "singleSelect",  valueOptions: [{ value: 0, label: 'Pending' },{ value: 1, label: 'Approved' },{ value: 2, label: 'Rejected' }]},
+  { field: 'manager_id', headerName: 'Manager ID', flex: .1, editable: false },
+  { field: 'manager_comment', headerName: 'Manager Comment',flex: .4, editable: false },
 ];
 
 async function fetchReimbursementRequests(): Promise<ReimbursementRequest[]> {

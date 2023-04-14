@@ -7,13 +7,18 @@ import {User} from "../models/user";
 import {Link, Navigate} from "react-router-dom";
 import {ReimbursementRequest} from "../models/reimbursement-request";
 import {authAppClient} from "../remote/authenticated-app-client";
-
-
+import {MenuItem} from "@mui/material";
 
 interface IEditReimbursementProps{
     currentUser: User | undefined,
     reimbursementID: Number | undefined
 }
+
+const reimbursementStatuses = [
+    {value: "0", label: "Pending"},
+    {value: "1", label: "Approved"},
+    {value: "2", label: "Rejected"}
+]
 
 async function fetchReimbursementRequest(id: Number): Promise<ReimbursementRequest> {
     const response = await authAppClient.get<ReimbursementRequest>(`http://localhost:3000/reimbursement/${id}`);
@@ -56,14 +61,14 @@ export default function EditReimbursement(props: IEditReimbursementProps){
 
     return (
         props.currentUser ?
-            <>
+            <div style={{padding: "20px"}}>
                 { reimbursementRequest ?
                     <>
                         {chooseForm()}
                         <Button variant="contained" color="primary" component={Link} to="/reimbursements" onClick={() => updateReimbursement()}>Update Reimbursement</Button>
                     </> : null
                 }
-            </>
+            </div>
             :
             <>
                 <Navigate to="/login"/>
@@ -150,7 +155,14 @@ export default function EditReimbursement(props: IEditReimbursementProps){
                         InputLabelProps={{ shrink: true }}
                         defaultValue ={new_status}
                         inputProps = {{readOnly:true}}
-                    />
+                        select={true}
+                    >
+                        {reimbursementStatuses.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </div>
                 <div>
                     <TextField
@@ -244,10 +256,16 @@ export default function EditReimbursement(props: IEditReimbursementProps){
                         label = "Status"
                         InputLabelProps={{ shrink: true }}
                         defaultValue ={new_status}
+                        select={true}
                         variant="filled"
-
                         onChange={(e) => set_new_status(Number(e.target.value))}
-                    />
+                    >
+                        {reimbursementStatuses.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </div>
                 <div>
                     <TextField
